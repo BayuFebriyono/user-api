@@ -54,10 +54,6 @@ public class AuthResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(@Valid  User user) {
-//        if (User.find("username", user.username).firstResultOptional().isPresent() ||
-//                User.find("email", user.email).firstResultOptional().isPresent()) {
-//            return Response.status(Response.Status.CONFLICT).build();
-//        }
 
         try {
             User newUser = authService.register(user);
