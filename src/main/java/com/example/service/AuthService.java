@@ -6,8 +6,10 @@ import com.example.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -37,7 +39,8 @@ public class AuthService {
                 user.loginAttempt = 0;
                 user.persist();
 
-                return Optional.of(service.generateAdminToken(user.email, user.username));
+                if(Objects.equals(user.role, "admin")) return Optional.of(service.generateAdminToken(user.email, user.username));
+                return Optional.of(service.generateUserToken(user.email, user.username));
             } else {
                 user.loginAttempt++;
                 user.persist();
@@ -49,8 +52,25 @@ public class AuthService {
 
     @Transactional
     public User register(User user) {
+
+        if ( isUsernameTaken(user.username)) {
+            throw new ValidationException("Username is already taken");
+        }
+        if (isEmailTaken(user.email)) {
+            throw new ValidationException("Email is already taken");
+        }
+
         user.password = BCrypt.hashpw(user.password, BCrypt.gensalt());
+        user.role = "user";
         user.persist();
         return user;
+    }
+
+    private boolean isUsernameTaken(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    private boolean isEmailTaken(String email) {
+        return userRepository.find("email", email).firstResultOptional().isPresent();
     }
 }

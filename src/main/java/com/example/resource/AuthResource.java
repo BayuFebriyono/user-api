@@ -8,6 +8,7 @@ import com.example.model.User;
 import com.example.service.AuthService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -52,14 +53,19 @@ public class AuthResource {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(User user) {
-        if (User.find("username", user.username).firstResultOptional().isPresent() ||
-                User.find("email", user.email).firstResultOptional().isPresent()) {
-            return Response.status(Response.Status.CONFLICT).build();
+    public Response register(@Valid  User user) {
+//        if (User.find("username", user.username).firstResultOptional().isPresent() ||
+//                User.find("email", user.email).firstResultOptional().isPresent()) {
+//            return Response.status(Response.Status.CONFLICT).build();
+//        }
+
+        try {
+            User newUser = authService.register(user);
+            return Response.ok(newUser).status(Response.Status.CREATED).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(true, e.getMessage())).build();
         }
 
-        User newUser = authService.register(user);
-        return Response.ok(newUser).status(Response.Status.CREATED).build();
     }
 
 

@@ -17,6 +17,10 @@ public class TokenService {
         return generateToken(email, username, Roles.ADMIN);
     }
 
+    public String generateUserToken(String email, String username) {
+        return generateToken(email, username, Roles.USER);
+    }
+
     public String generateServiceToken(String serviceId, String serviceName) {
         return generateToken(serviceId,serviceName,Roles.SERVICE);
     }
