@@ -1,22 +1,31 @@
 # user-api
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Untuk menjalankan aplikasi ini pastikan sudah terinstal postgreSql pada sistem anda.
+kemudian buka file application.properties pada directory <b>src/main/java/resource</b> 
+ubah bagian configurasi database sesuai sistem anda
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+```
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.username=postgres
+quarkus.datasource.password=secret
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/px-shredder
+```
 
-## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using:
+
+## Menjalankan Aplikasi
+
+Jika semua setup sudah dilakukan silahkan jalankan perintah tersbut di terminal:
 
 ```shell script
 ./mvnw compile quarkus:dev
 ```
+Aplikasi akan berjalan pada url http://localhost:8080
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+> **_NOTE:_**  Anda tidak memerlukan file migrasi database saat run aplikasi akan otomatis menyusun database sendiri. anda hanya perlu membuat satu database baru saja dengan nama sesuai yang sudah anda tuliskan pada application.properties.
 
 
-## Note
-saya tidak menggunakan docker jadi untuk database postgres bisa dinisiasi di machine local dengan db_name : px-shredder
+## Dokumentasi Endpoint
 
 <b>buka endpoint berikut untuk melihat endpoint yang tesedia</b>
 
